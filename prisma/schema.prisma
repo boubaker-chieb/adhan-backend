@@ -1,0 +1,73 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+
+datasource db {
+    provider = "postgresql"
+    url = env("DATABASE_URL")
+}
+
+
+enum CalcMethod {
+    MWL
+    UmmAlQura
+    ISNA
+    Egyptian
+    Karachi
+    Dubai
+    Qatar
+    Kuwait
+    Moonsighting
+    Turkey
+}
+
+
+enum Madhab {
+    Shafi
+    Hanafi
+}
+
+
+enum HighLatRule {
+    MiddleOfTheNight
+    SeventhOfTheNight
+    TwilightAngle
+}
+
+
+enum LatAdjMethod {
+    MiddleOfTheNight
+    AngleBased
+    OneSeventh
+}
+
+
+model User {
+    id String @id @default(cuid())
+    email String @unique
+    passwordHash String
+    name String?
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    refreshToken String?
+    prefs Prefs?
+    locations Location[]
+}
+
+
+model Prefs {
+    id String @id @default(cuid())
+    userId String @unique
+    calcMethod CalcMethod @default(MWL)
+    madhab Madhab @default(Shafi)
+    highLatRule HighLatRule @default(MiddleOfTheNight)
+    latitudeAdjustment LatAdjMethod @default(MiddleOfTheNight)
+    useMoonsighting Boolean @default(false)
+    user User @relation(fields: [userId], references: [id])
+}
+
+
+model Location {
+    id String @id @default(cuid())
+}
