@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ScheduleModule } from '@nestjs/schedule';
 import { PrayerModule } from './prayer/prayer.module';
 import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
@@ -15,6 +16,7 @@ import { UsersService } from './users/providers/users.service';
   providers: [UsersService],
   imports: [
     ConfigModule.forRoot(),
+    ScheduleModule.forRoot(),
     PrayerModule,
     UsersModule,
     CommonModule,

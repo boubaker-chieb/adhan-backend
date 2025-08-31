@@ -1,4 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { Cron } from '@nestjs/schedule';
+import { PrayerGateway } from './prayer.gateway';
 import { DateTime } from 'luxon';
 import {
   CalculationMethod,
@@ -53,7 +55,21 @@ function mapHLR(h: HighLatRule) {
 }
 @Injectable()
 export class PrayersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private prayerGateway: PrayerGateway,
+  ) {}
+  
+  notifyUsersAtPrayerTime(prayerName: string, time: string) {
+    const message = `It's time for ${prayerName}: ${time}`;
+    this.prayerGateway.notifyPrayerTime(message);
+  }
+
+  // Example: Schedule notification for Fajr every day at 05:00
+  @Cron('0 5 * * *', { name: 'fajrNotification' })
+  handleFajrNotification() {
+    this.notifyUsersAtPrayerTime('Fajr', '05:00');
+  }
   async getFor(
     userId: string | null,
     params: { lat?: number; lon?: number; date?: string; locationId?: string },
@@ -62,9 +78,12 @@ export class PrayersService {
     let longitude: number;
     let timezone = 'UTC';
     // Get location
-    const loc = params.locationId && params.locationId !== '' ? await this.prisma.location.findUnique({
-      where: { id: params.locationId },
-    }) : null;
+    const loc =
+      params.locationId && params.locationId !== ''
+        ? await this.prisma.location.findUnique({
+            where: { id: params.locationId },
+          })
+        : null;
     if (loc) {
       latitude = loc.latitude;
       longitude = loc.longitude;
