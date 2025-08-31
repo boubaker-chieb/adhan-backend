@@ -1,0 +1,31 @@
+/* swagger-custom.css */
+
+body {
+  background: #f5f7fa;
+}
+
+.swagger-ui .topbar {
+  background: #2f3cf2;
+}
+
+.swagger-ui .topbar .topbar-wrapper span {
+  color: #f7fafc;
+  font-weight: bold;
+}
+
+.swagger-ui .info {
+  border-radius: 8px;
+  background: #edf2f7;
+  padding: 16px;
+}
+
+.swagger-ui .scheme-container {
+  background: #e2e8f0;
+}
+
+.swagger-ui .opblock {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+/* Add more custom styles as needed */
