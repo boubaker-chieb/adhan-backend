@@ -70,4 +70,12 @@ model Prefs {
 
 model Location {
     id String @id @default(cuid())
+    userId String
+    name String
+    latitude Float
+    longitude Float
+    timezone String // IANA TZ, e.g. "Europe/Paris"
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    user User @relation(fields: [userId], references: [id])
 }
